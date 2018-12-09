@@ -1,0 +1,16 @@
+The test code for the branch predictor PoC. Intructions used in the first
+part of the assignment have been elaborated to what a real sequence would
+look like (e.g. mul is actually a mult and a mflo).
+
+Init vals: $s4 <- 5, $s5 <- 1
+0ff8:      addi $s3, $zero, 3    00100000000100110000000000000011
+0ffc:      addi $s1, $zero, 1    00100000000100010000000000000001
+1000:L0    sub  $s4, $s4, $s1    00000010100100011010000000100010
+1004       mult $s4, $s3         00000010100100110000000000011000
+1008       mflo $s5              00100000000100110000000000000011
+100c       beq  $s5, $r0 T1      00010010101000000001000000010100
+1010       j    T2               00001000000000000001000000011000
+1014:T1:   add  $s5, $s5, $s4    00000010101101001010100000100000
+1018:T2:   bgtz $s4, L0          00011110100000000001000000000000
+
+
