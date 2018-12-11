@@ -326,7 +326,7 @@ module Processor(
         .d_pc            (ID_PCAdd4),
         .d_is_branch     (IsBranch),
         .d_target_addr   (ID_BranchAddress),
-        .x_predict_res   (ID_PCSrc[1]),
+        .x_predict_res   (ID_PCSrc[0] | ID_PCSrc[1]),
         .f_predict_addr  (IF_PC_Predicted),
         .f_predict_valid (IF_PC_PredictionValid)
     );
