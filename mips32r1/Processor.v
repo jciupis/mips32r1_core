@@ -59,7 +59,7 @@ module Processor(
     wire IF_Exception_Stall;
     wire IF_Exception_Flush;
     wire IF_IsBDS;
-    wire [31:0] IF_PCAdd4, IF_PC_PreExc, IF_PCIn, IF_PCOut, IF_Instruction;
+    wire [31:0] IF_PCAdd4, IF_PC_PreExc, IF_PCSrcPred,IF_PCIn, IF_PCOut, IF_Instruction;
 
     /*** ID (Instruction Decode) Signals ***/
     wire ID_Stall;
@@ -336,13 +336,13 @@ module Processor(
         .sel(IF_PC_PredictionValid),
         .in0(IF_PCAdd4),
         .in1(IF_PC_Predicted),
-        .out(IF_PCAdd4)
+        .out(IF_PCSrcPred)
     );
 
     /*** PC Source Non-Exception Mux ***/
     Mux4 #(.WIDTH(32)) PCSrcStd_Mux (
         .sel  (ID_PCSrc),
-        .in0  (IF_PCAdd4),
+        .in0  (IF_PCSrcPred),
         .in1  (ID_JumpAddress),
         .in2  (ID_BranchAddress),
         .in3  (ID_ReadData1_End),
