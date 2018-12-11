@@ -33,6 +33,7 @@ module Control(
     output IF_Flush,
     output reg [7:0] DP_Hazards,
     output [1:0] PCSrc,
+    output IsBranch,
     output SignExtend,
     output Link,
     output Movn,

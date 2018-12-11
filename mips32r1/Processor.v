@@ -155,6 +155,11 @@ module Processor(
     /*** Other Signals ***/
     wire [7:0] ID_DP_Hazards, HAZ_DP_Hazards;
 
+    /*** Branch Prediction Signals ***/
+    wire [31:0] IF_PC_Predicted;
+    wire IF_PC_PredictionValid;
+    wire IsBranch;
+
     /*** Assignments ***/
     assign IF_Instruction = (IF_Stall) ? 32'h00000000 : InstMem_In;
     assign IF_IsBDS = ID_NextIsDelay;
@@ -189,6 +194,7 @@ module Processor(
         .IF_Flush       (IF_Flush),
         .DP_Hazards     (ID_DP_Hazards),
         .PCSrc          (ID_PCSrc),
+        .IsBranch       (IsBranch),
         .SignExtend     (ID_SignExtend),
         .Link           (ID_Link),
         .Movn           (ID_Movn),
@@ -311,6 +317,26 @@ module Processor(
         .Exc_PC_Sel          (ID_PCSrc_Exc),
         .Exc_PC_Out          (ID_ExceptionPC),
         .IP                  (IP)
+    );
+
+    /*** Branch predictor ***/
+    branch_predictor BranchPredictor (
+        .clk             (clock),
+        .f_pc            (IF_PCAdd4),
+        .d_pc            (ID_PCAdd4),
+        .d_is_branch     (IsBranch),
+        .d_target_addr   (ID_BranchAddress),
+        .x_predict_res   (ID_PCSrc[1]),
+        .f_predict_addr  (IF_PC_Predicted),
+        .f_predict_valid (IF_PC_PredictionValid)
+    );
+
+    /*** PC Source Prediction Mux ***/
+    Mux2 #(.WIDTH(32)) PCPredicted_Mux (
+        .sel(IF_PC_PredictionValid),
+        .in0(IF_PCAdd4),
+        .in1(IF_PC_Predicted),
+        .out(IF_PCAdd4)
     );
 
     /*** PC Source Non-Exception Mux ***/
