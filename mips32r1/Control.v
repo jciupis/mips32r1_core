@@ -462,12 +462,17 @@ module Control(
     assign Branch_GEZ = ~OpCode[2] &  Rt[0] & Cmp_GEZ;
     assign Branch_LTZ = ~OpCode[2] & ~Rt[0] & Cmp_LZ;
 
-    assign IsBranch = ( OpCode[2] & ~OpCode[1] & ~OpCode[0]) |
-                      ( OpCode[2] &  OpCode[1] &  OpCode[0]) |
-                      ( OpCode[2] &  OpCode[1] & ~OpCode[0]) |
-                      ( OpCode[2] & ~OpCode[1] &  OpCode[0]) |
-                      (~OpCode[2] &  Rt[0]) |
-                      (~OpCode[2] & ~Rt[0]);
+    assign IsBranch = ((OpCode == `Op_Beq)    ||
+                       (OpCode == `Op_Bgez)   ||
+                       (OpCode == `Op_Bgezal) ||
+                       (OpCode == `Op_Bgtz)   ||
+                       (OpCode == `Op_Blez)   ||
+                       (OpCode == `Op_Bltz)   ||
+                       (OpCode == `Op_Bltzal) ||
+                       (OpCode == `Op_Bne)    ||
+                       (OpCode == `Op_Jal)    ||
+                       (OpCode == `Op_J));
+
     assign Branch = Branch_EQ | Branch_GTZ | Branch_LEZ | Branch_NEQ | Branch_GEZ | Branch_LTZ;
     assign PCSrc[1] = (Datapath[15] & ~Datapath[14]) ? Branch : Datapath[15];
 
