@@ -29,9 +29,9 @@ module tb_CPU1();
             ext_mem_mock[3] = 32'b00000010100100110000000000011000; // mult $s4, $s3
             ext_mem_mock[4] = 32'b00000000000000001010100000010010; // mflo $s5
             ext_mem_mock[5] = 32'b00010010101000000000000000000010; // beq  $s5, $r0 2 (T1)
-            ext_mem_mock[6] = 32'b00001000000000000001000000011000; // j    1000 (T2)
+            ext_mem_mock[6] = 32'b00001000000000000001000000000000; // j    1000 (T2)
             ext_mem_mock[7] = 32'b00000010101101001010100000100000; // add  $s5, $s5, $s4
-            ext_mem_mock[8] = 32'b00011110100000001111111111111010; // bgtz $s4, -6 (L0)
+            ext_mem_mock[8] = 32'b00011110100000001111111111111001; // bgtz $s4, -7 (L0)
 			// Extra & initialization. Init vals: $s4 <- 5, $s5 <- 1
             ext_mem_mock[9]  = 32'b00001000000000000000111111111000; // j 0xff8, initializer to jump near our loop and use the InstMem_Address from there
             ext_mem_mock[10] = 32'b00100000000101000000000000000101; // addi $s4, $r0, 5
